@@ -1,0 +1,123 @@
+:root {
+    --primary: #1a110c;
+    --accent: #8c4a2f;
+    --gold: #d4af88;
+    --smoke: rgba(30, 25, 22, 0.96);
+    --eggshell: #f5f0e8;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f9f5f0;
+    color: #3c2f28;
+}
+h1, h2, h3, h4, .modal-title, .offcanvas-title {
+    font-family: 'Playfair Display', serif;
+}
+
+.navbar {
+    background: rgba(26, 17, 12, 0.98) !important;
+    backdrop-filter: blur(12px);
+}
+
+.smoke-bg {
+    background: linear-gradient(var(--smoke), var(--smoke)),
+                url('https://lugner.sk/wp-content/uploads/2024/03/IMG_3870.webp') center/cover no-repeat fixed;
+    position: relative;
+}
+.smoke-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.08) 0%, transparent 70%);
+    animation: smokeDrift 28s linear infinite;
+    pointer-events: none;
+}
+@keyframes smokeDrift {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(-40px, -80px) rotate(5deg); }
+}
+
+.hero {
+    background: linear-gradient(rgba(26, 17, 12, 0.78), rgba(26, 17, 12, 0.9)),
+                url('https://lugner.sk/wp-content/uploads/2024/03/IMG_3870.webp') center/cover no-repeat fixed;
+    color: white;
+    padding: 260px 0 170px;
+}
+
+.product-card {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    overflow: hidden;
+    height: 100%;
+    border-radius: 20px;
+    background: var(--eggshell);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    opacity: 0;
+    transform: translateY(50px);
+}
+.product-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.product-card:hover {
+    transform: translateY(-22px) scale(1.03);
+    box-shadow: 0 50px 100px -15px rgba(140, 74, 47, 0.55) !important;
+}
+.product-card img {
+    height: 260px;
+    object-fit: cover;
+    transition: transform 0.9s ease;
+    will-change: transform;
+}
+.product-card:hover img {
+    transform: scale(1.12);
+}
+
+#wines .product-card,
+#wines .product-card img {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.section-padding {
+    padding: 80px 0;
+}
+.badge-origin {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(212, 175, 136, 0.95);
+    color: #1a110c;
+    font-size: 0.78rem;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(212,175,136,0.3);
+}
+
+#products, #wines {
+    background: #d4b88a url('https://hollandandoak.com/wp-content/uploads/2025/03/QCCI-5_endGrain_med_cropped.jpg') center/cover no-repeat;
+    background-blend-mode: multiply;
+}
+
+#cartOffcanvas {
+    box-shadow: -20px 0 40px -10px rgba(0,0,0,0.25);
+    width: 460px;
+}
+.fly-to-cart {
+    animation: flyToCartAnim 0.9s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+@keyframes flyToCartAnim {
+    to {
+        top: 90px;
+        right: 70px;
+        transform: scale(0.12);
+        opacity: 0;
+    }
+}
+.custom-toast {
+    background: var(--primary);
+    border-radius: 9999px;
+    box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3);
+}

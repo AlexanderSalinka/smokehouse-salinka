@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium smoked meats and curated wines from Smokehouse Salinka — time-honored European tradition since 1975.">
+    <title>Smokehouse Salinka | Premium Smoked Meats</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3 d-flex align-items-center gap-2" href="#">
+                <i class="fas fa-fire"></i> SMOKEHOUSE SALINKA
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item"><a class="nav-link px-3" href="#story">Story</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#products">Meats</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#wines">Wines</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#location">Visit</a></li>
+                    <li class="nav-item ms-3 position-relative">
+                        <button onclick="toggleCart()" class="btn btn-outline-light position-relative d-flex align-items-center gap-2 px-3 py-2">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cartCount" class="badge bg-warning text-dark rounded-pill">0</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero" class="hero text-center smoke-bg">
+        <div class="container position-relative" style="z-index: 2;">
+            <div class="mb-4">
+                <span class="badge bg-warning text-dark px-5 py-3 fs-5 rounded-pill">ESTABLISHED 1975</span>
+            </div>
+            <h1 class="display-1 fw-bold mb-4">Údené fajnovosti</h1>
+            <p class="lead fs-3 col-lg-8 mx-auto">
+                Masterfully smoked delicacies from the old European tradition.<br>
+                <span class="opacity-75">For those who appreciate the finest.</span>
+            </p>
+            <button onclick="document.getElementById('products').scrollIntoView({ behavior: 'smooth' })" class="btn btn-light btn-lg px-5 py-3 mt-4 shadow-sm fs-5">
+                DISCOVER THE COLLECTION
+            </button>
+        </div>
+    </section>
+
+    <!-- Story -->
+    <section id="story" class="section-padding bg-light">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <img src="https://swaledale.co.uk/cdn/shop/files/1500x600_5_swaledale_whole_carcass.jpg?crop=center&height=576&v=1680769538&width=1440"
+                         class="img-fluid rounded-4 shadow" alt="Traditional smokehouse with hanging meats" loading="lazy">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="display-5 mb-4">Our Legacy</h2>
+                    <p class="lead">For over five decades, the Salinka family has perfected the ancient art of smoking meats using only the finest ingredients and time-honored techniques.</p>
+                    <p>Sweetwood smoke, patience, and reverence for tradition define every product we create.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products" class="section-padding">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-5">
+                <h2 class="display-5">The Smoked Collection</h2>
+                <div class="d-flex gap-3 flex-wrap">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search products..." style="min-width: 260px;" onkeyup="filterProducts()">
+                    <select id="originFilter" class="form-select" style="min-width: 180px;" onchange="filterProducts()">
+                        <option value="">All Origins</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row g-4" id="productGrid"></div>
+        </div>
+    </section>
+
+    <!-- Wines -->
+    <section id="wines" class="section-padding smoke-bg">
+        <div class="container">
+            <h2 class="display-5 section-title text-white text-center">Curated Wines</h2>
+            <p class="text-center text-white-50 mb-5">Perfectly paired with our smoked delicacies</p>
+            <div class="row g-4" id="wineGrid"></div>
+        </div>
+    </section>
+
+    <!-- Location -->
+    <section id="location" class="section-padding smoke-bg text-white">
+        <div class="container">
+            <h2 class="display-5 section-title text-white text-center">The Smokehouse</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="ratio ratio-16x9 mb-4 rounded-4 overflow-hidden shadow">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.5!2d18.042!3d48.894!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476b3f8e6f0f0f0f%3A0x1!2sJed%C4%BEov%C3%A1%2012%2C%20911%2005%20Tren%C4%8D%C3%ADn!5e0!3m2!1sen!2ssk!4v123456789" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <p class="text-center lead">Jedľová 12, Trenčín, Slovakia</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-5" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" style="width: 460px;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title d-flex align-items-center gap-2">
+                <i class="fas fa-shopping-cart"></i> Your Cart (<span id="offcanvasCartCount">0</span>)
+            </h5>
+            <div>
+                <button onclick="clearCart()" class="btn btn-sm btn-outline-danger me-2">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+        </div>
+        <div class="offcanvas-body d-flex flex-column p-0" id="cartBody"></div>
+        <div class="p-4 border-top bg-light mt-auto">
+            <div id="cartSummary"></div>
+            <div class="d-grid gap-2 mt-4">
+                <button onclick="checkout()" class="btn btn-dark w-100 py-3 fw-semibold fs-5">PROCEED TO CHECKOUT</button>
+                <button onclick="closeCartAndScroll()" class="btn btn-outline-dark w-100 py-3">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container text-center">
+            <h4 class="d-flex align-items-center justify-content-center gap-2 mb-3">
+                <i class="fas fa-fire"></i> Smokehouse Salinka
+            </h4>
+            <p class="opacity-75 mb-1">Ing. Alexander Salinka • Trenčín, Slovakia</p>
+            <p class="small opacity-50">&copy; 2026 • Exclusively for those who demand the extraordinary</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
