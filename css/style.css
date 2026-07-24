@@ -4,6 +4,7 @@
     --gold: #d4af88;
     --smoke: rgba(30, 25, 22, 0.96);
     --eggshell: #f5f0e8;
+    --eggshell-deep: #ece3d4;
 }
 
 body {
@@ -97,8 +98,16 @@ h1, h2, h3, h4, .modal-title, .offcanvas-title {
 }
 
 #products, #wines {
-    background: #d4b88a url('https://hollandandoak.com/wp-content/uploads/2025/03/QCCI-5_endGrain_med_cropped.jpg') center/cover no-repeat;
-    background-blend-mode: multiply;
+    background: var(--eggshell-deep);
+    position: relative;
+}
+#products::before, #wines::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(60, 47, 40, 0.06) 0%, transparent 70%);
+    animation: smokeDrift 28s linear infinite;
+    pointer-events: none;
 }
 
 #products h2,
