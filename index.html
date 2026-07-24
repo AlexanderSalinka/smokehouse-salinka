@@ -75,15 +75,13 @@
     <!-- Products -->
     <section id="products" class="section-padding">
         <div class="container">
-            <div class="d-flex flex-wrap justify-content-between align-items-end mb-5">
+            <div class="text-center mb-4">
                 <h2 class="display-5">The Smoked Collection</h2>
-                <div class="d-flex gap-3 flex-wrap">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search products..." style="min-width: 260px;" onkeyup="filterProducts()">
-                    <select id="originFilter" class="form-select" style="min-width: 180px;" onchange="filterProducts()">
-                        <option value="">All Origins</option>
-                    </select>
-                </div>
             </div>
+            <div class="text-center mb-4">
+                <input type="text" id="searchInput" class="form-control mx-auto" placeholder="Search products..." style="max-width: 400px;" onkeyup="filterProducts()">
+            </div>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mb-5" id="originFilterPills"></div>
             <div class="row g-4" id="productGrid"></div>
         </div>
     </section>
@@ -91,8 +89,14 @@
     <!-- Wines -->
     <section id="wines" class="section-padding smoke-bg">
         <div class="container">
-            <h2 class="display-5 section-title text-white text-center">Curated Wines</h2>
-            <p class="text-center text-white-50 mb-5">Perfectly paired with our smoked delicacies</p>
+            <div class="text-center mb-4">
+                <h2 class="display-5 section-title">Curated Wines</h2>
+            </div>
+            <p class="text-center text-white-50 mb-4">Perfectly paired with our smoked delicacies</p>
+            <div class="text-center mb-4">
+                <input type="text" id="wineSearchInput" class="form-control mx-auto" placeholder="Search wines..." style="max-width: 400px;" onkeyup="filterWines()">
+            </div>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mb-5" id="wineTypeFilterPills"></div>
             <div class="row g-4" id="wineGrid"></div>
         </div>
     </section>
@@ -100,7 +104,9 @@
     <!-- Location -->
     <section id="location" class="section-padding smoke-bg text-white">
         <div class="container">
-            <h2 class="display-5 section-title text-white text-center">The Smokehouse</h2>
+            <div class="text-center mb-4">
+                <h2 class="display-5 section-title">The Smokehouse</h2>
+            </div>
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="ratio ratio-16x9 mb-4 rounded-4 overflow-hidden shadow">

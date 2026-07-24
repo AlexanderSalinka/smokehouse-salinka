@@ -101,6 +101,44 @@ h1, h2, h3, h4, .modal-title, .offcanvas-title {
     background-blend-mode: multiply;
 }
 
+#products h2,
+#wines h2,
+#location h2 {
+    position: relative;
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    color: var(--gold);
+    text-shadow:
+        2px 3px 4px rgba(0, 0, 0, 0.85),
+        -1px -1px 1px rgba(255, 255, 255, 0.15);
+}
+#products h2::before,
+#wines h2::before,
+#location h2::before {
+    content: '';
+    position: absolute;
+    inset: -20px -30px;
+    background: radial-gradient(ellipse at center, rgba(20, 14, 10, 0.55) 0%, rgba(20, 14, 10, 0) 75%);
+    pointer-events: none;
+}
+
+.origin-pill,
+.pairing-pill {
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    background: rgba(26, 17, 12, 0.55);
+}
+.origin-pill:hover,
+.pairing-pill:hover {
+    background: rgba(26, 17, 12, 0.75);
+    color: var(--gold);
+}
+.origin-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
 #cartOffcanvas {
     box-shadow: -20px 0 40px -10px rgba(0,0,0,0.25);
     width: 460px;

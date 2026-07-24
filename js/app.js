@@ -1,4 +1,6 @@
 let cart = JSON.parse(localStorage.getItem('salinkaCart')) || [];
+let selectedOrigin = '';
+let selectedWineType = '';
 
 const FALLBACK_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
@@ -19,15 +21,30 @@ function updateCartCount() {
 
 function filterProducts() {
     const search = document.getElementById('searchInput').value.toLowerCase().trim();
-    const origin = document.getElementById('originFilter').value;
 
     const filtered = products.filter(p => {
         const matchSearch = !search || p.name.toLowerCase().includes(search) || p.desc.toLowerCase().includes(search);
-        const matchOrigin = !origin || p.origin === origin;
+        const matchOrigin = !selectedOrigin || p.origin === selectedOrigin;
         return matchSearch && matchOrigin;
     });
 
     renderProducts(filtered);
+}
+
+function renderOriginPills() {
+    const origins = ['', ...new Set(products.map(p => p.origin))];
+    const container = document.getElementById('originFilterPills');
+    container.innerHTML = origins.map(origin => {
+        const label = origin || 'All Origins';
+        const activeClass = origin === selectedOrigin ? ' active' : '';
+        return `<button type="button" class="btn btn-sm rounded-pill origin-pill${activeClass}" onclick="setOriginFilter('${origin}')">${label}</button>`;
+    }).join('');
+}
+
+function setOriginFilter(origin) {
+    selectedOrigin = origin;
+    renderOriginPills();
+    filterProducts();
 }
 
 function renderProducts(prods = products) {
@@ -55,17 +72,23 @@ function renderProducts(prods = products) {
         `;
     }).join('');
 
+    revealCards(container);
+}
+
+function revealCards(container) {
     setTimeout(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
         }, { threshold: 0.15 });
-        document.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+        container.querySelectorAll('.product-card').forEach(card => observer.observe(card));
     }, 100);
 }
 
-function renderWines() {
+function renderWines(wineList = wines) {
     const container = document.getElementById('wineGrid');
-    container.innerHTML = wines.map((w, i) => `
+    container.innerHTML = wineList.map((w) => {
+        const globalIndex = wines.indexOf(w);
+        return `
         <div class="col-md-6 col-lg-4 col-xl-3">
             <div class="card product-card h-100">
                 <div class="position-relative">
@@ -77,18 +100,76 @@ function renderWines() {
                     <p class="text-muted small flex-grow-1">${w.desc}</p>
                     <p class="fw-bold text-success fs-3 mb-3">${w.price} €</p>
                     <div class="d-flex gap-2">
-                        <button onclick="showProduct(${i}, 'wine'); event.stopImmediatePropagation();" class="btn btn-outline-dark flex-grow-1">Details</button>
-                        <button onclick="addToCart(${i}, 'wine'); event.stopImmediatePropagation();" class="btn btn-dark flex-grow-1">Add to Cart</button>
+                        <button onclick="showProduct(${globalIndex}, 'wine'); event.stopImmediatePropagation();" class="btn btn-outline-dark flex-grow-1">Details</button>
+                        <button onclick="addToCart(${globalIndex}, 'wine'); event.stopImmediatePropagation();" class="btn btn-dark flex-grow-1">Add to Cart</button>
                     </div>
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
+
+    revealCards(container);
+}
+
+function filterWines() {
+    const search = document.getElementById('wineSearchInput').value.toLowerCase().trim();
+
+    const filtered = wines.filter(w => {
+        const matchSearch = !search || w.name.toLowerCase().includes(search) || w.desc.toLowerCase().includes(search);
+        const matchType = !selectedWineType || w.type === selectedWineType;
+        return matchSearch && matchType;
+    });
+
+    renderWines(filtered);
+}
+
+function renderWineTypePills() {
+    const types = ['', ...new Set(wines.map(w => w.type))];
+    const container = document.getElementById('wineTypeFilterPills');
+    container.innerHTML = types.map(type => {
+        const label = type || 'All Types';
+        const activeClass = type === selectedWineType ? ' active' : '';
+        return `<button type="button" class="btn btn-sm rounded-pill origin-pill${activeClass}" onclick="setWineTypeFilter('${type}')">${label}</button>`;
+    }).join('');
+}
+
+function setWineTypeFilter(type) {
+    selectedWineType = type;
+    renderWineTypePills();
+    filterWines();
 }
 
 function showProduct(index, type) {
     const item = type === 'meat' ? products[index] : wines[index];
-    const modal = new bootstrap.Modal(document.getElementById('productModal'));
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('productModal'));
+
+    let pairingHtml = '';
+    if (type === 'meat') {
+        const wineIndex = wines.findIndex(w => w.name === item.pairsWith);
+        if (wineIndex !== -1) {
+            pairingHtml = `
+                <div class="mt-4">
+                    <p class="text-muted mb-2"><strong>Pairs with:</strong></p>
+                    <button onclick="showProduct(${wineIndex}, 'wine')" class="btn btn-sm rounded-pill pairing-pill">🍷 ${wines[wineIndex].name}</button>
+                </div>
+            `;
+        }
+    } else {
+        const pairedMeats = products
+            .map((p, i) => ({ product: p, globalIndex: i }))
+            .filter(entry => entry.product.pairsWith === item.name);
+        if (pairedMeats.length > 0) {
+            pairingHtml = `
+                <div class="mt-4">
+                    <p class="text-muted mb-2"><strong>Pairs well with:</strong></p>
+                    <div class="d-flex flex-wrap gap-2">
+                        ${pairedMeats.map(entry => `<button onclick="showProduct(${entry.globalIndex}, 'meat')" class="btn btn-sm rounded-pill pairing-pill">${entry.product.name}</button>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    }
 
     document.getElementById('modalTitle').textContent = item.name;
     document.getElementById('modalBody').innerHTML = `
@@ -100,6 +181,7 @@ function showProduct(index, type) {
                 <p class="lead">${item.longDesc}</p>
                 <h3 class="text-success">${item.price} ${type === 'meat' ? '€ / kg' : '€'}</h3>
                 <p class="text-muted"><strong>Perfect with:</strong> ${item.wine || item.longDesc}</p>
+                ${pairingHtml}
                 <button onclick="addToCart(${index}, '${type}'); bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();"
                         class="btn btn-dark w-100 py-3 mt-4">ADD TO CART</button>
             </div>
@@ -172,7 +254,7 @@ function renderCart() {
     }
     body.innerHTML = html;
 
-    const shipping = subtotal > 50 ? 0 : 9;
+    const shipping = cart.length === 0 ? 0 : (subtotal > 50 ? 0 : 5);
     const total = subtotal + shipping;
 
     document.getElementById('cartSummary').innerHTML = `
@@ -222,7 +304,7 @@ function clearCart() {
 }
 
 function toggleCart() {
-    const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+    const offcanvas = bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('cartOffcanvas'));
     renderCart();
     offcanvas.show();
 }
@@ -251,14 +333,8 @@ function checkout() {
 }
 
 function init() {
-    const origins = [...new Set(products.map(p => p.origin))];
-    const select = document.getElementById('originFilter');
-    origins.forEach(origin => {
-        const option = document.createElement('option');
-        option.value = origin;
-        option.textContent = origin;
-        select.appendChild(option);
-    });
+    renderOriginPills();
+    renderWineTypePills();
     renderProducts();
     renderWines();
     updateCartCount();
