@@ -110,8 +110,6 @@ h1, h2, h3, h4, .modal-title, .offcanvas-title {
     pointer-events: none;
 }
 
-#products h2,
-#wines h2,
 #location h2 {
     position: relative;
     display: inline-block;
@@ -121,14 +119,17 @@ h1, h2, h3, h4, .modal-title, .offcanvas-title {
         2px 3px 4px rgba(0, 0, 0, 0.85),
         -1px -1px 1px rgba(255, 255, 255, 0.15);
 }
-#products h2::before,
-#wines h2::before,
 #location h2::before {
     content: '';
     position: absolute;
     inset: -20px -30px;
     background: radial-gradient(ellipse at center, rgba(20, 14, 10, 0.55) 0%, rgba(20, 14, 10, 0) 75%);
     pointer-events: none;
+}
+
+#products h2,
+#wines h2 {
+    color: var(--accent);
 }
 
 .origin-pill,
